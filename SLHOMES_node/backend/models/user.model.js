@@ -1,10 +1,7 @@
-const express = require("express");
 const mongoose = require("mongoose");
 
-const schema = mongoose.Schema;
-
-userSchema = new schema({
-   // id: { type: String, required: true, index: true, auto: true},
+const userSchema = new mongoose.schema({
+   // id: { type: String, required: true, index: true, auto: true, unique: true},
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true, dropDups: true },
@@ -16,6 +13,6 @@ userSchema = new schema({
     collegeName: { type: String, required: true },
     studentId: { type: String, required: true },
     isAdmin: { type: Boolean, default: false, required: true },
-    });
+    },{timestamps : true});
 
-module.exports = mongoose.model("User", userSchema);
+export const User = mongoose.model("User", userSchema);

@@ -5,7 +5,7 @@ const userRouter = require("./routes/user");
 const app = express();
 
 //Middleware
-app.use(express.json());
+// app.use(express.json());
 
 app.use((req, res, next) => {
     console.log(req.path, req.method);
@@ -14,6 +14,10 @@ app.use((req, res, next) => {
 
 //Routes
 app.use("/api/users", userRouter);
+
+app.get('/smit' , (req, res) => {
+    res.send("<h2> HI SMIT</h2>")
+})
 
 
 app.listen(process.env.PORT, () => {
