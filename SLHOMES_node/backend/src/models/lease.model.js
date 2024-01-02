@@ -8,11 +8,12 @@ const leaseSchema = mongoose.Schema({
     leaseHolder :{
         type : mongoose.Schema.Types.ObjectId,
         ref : 'User',
-        required : true
+        required : true,
+        index : true
     },
     leaseStartDate : {
         type : Date,
-    required : true
+        required : true
     },
     leaseEndDate : {
         type : Date,
