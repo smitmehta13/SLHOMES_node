@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose"
 
 const userSchema = new mongoose.schema({
    // id: { type: String, required: true, index: true, auto: true, unique: true},
