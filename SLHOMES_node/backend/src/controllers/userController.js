@@ -4,6 +4,7 @@ import { asyncHandler } from "../utils/asyncHandler.js"
 import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 
+
 const getAllUsers = asyncHandler (async (req, res) => {
     try {
         let results = await User.find({});
@@ -24,8 +25,7 @@ const getUserById = async (req, res) => {
 const createNewUser = async (req, res) => {
     try {
 
-        //get date from user
-       
+        //get data from user
         //validation - not empty
         //check if user already exist
         //create user object and enter into DB
@@ -76,4 +76,4 @@ const updateUser = async (req,res) => {
     res.status(200).json({ message: "User Updated "})
 };
 
-export { getAllUsers, getUserById, createNewUser, updateUser };
+export { getAllUsers, getUserById, createNewUser, updateUser};
