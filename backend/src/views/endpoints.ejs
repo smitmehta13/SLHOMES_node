@@ -1,0 +1,18 @@
+<!-- views/endpoints.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Endpoints</title>
+</head>
+<body>
+  <h1>Available Endpoints</h1>
+  <ul>
+    <% endpoints.forEach(endpoint => { %>
+      <li><strong><%= endpoint.methods %></strong>: <a href="<%= endpoint.path %>"><%= endpoint.path %></a></li>
+    <% }); %>
+  </ul>
+</body>
+</html>

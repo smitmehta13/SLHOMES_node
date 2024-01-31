@@ -19,3 +19,7 @@ const propertySchema = mongoose.Schema({
     
 },
 {timestamps : true})
+
+const Property = mongoose.model("Property", propertySchema)
+
+export { Property };
