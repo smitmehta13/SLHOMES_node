@@ -1,0 +1,10 @@
+/backend/node_modules
+/backend/.env
+../../Sherlock_Homes/
+../../ShoppingNodeJSMongoDB/
+../../reol224.github.io/
+../../smitmehta13.github.io/
+../../smitmehta13/
+../../sudoku solver/
+../../Pets-More/
+src/utils/asyncHandler.js
