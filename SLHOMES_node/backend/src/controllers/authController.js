@@ -124,6 +124,6 @@ const refreshAccessToken = asyncHandler(async(req, res)=>{
         
     }
 
-})
+});
 
 export {loginUser, logoutUser, refreshAccessToken}
