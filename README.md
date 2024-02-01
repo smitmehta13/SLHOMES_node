@@ -1,4 +1,4 @@
-# Sherlock Holmes Backend
+# Sherlock Homes Backend
 
 This is the backend server for the Property Management System, a Node.js application designed to manage property-related data.
 
@@ -38,8 +38,8 @@ Before running the application, ensure you have the following installed:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/property-management-backend.git
-   cd property-management-backend
+   git clone https://github.com/smitmehta13/SLHOMES_node.git
+   cd backend
    ```
 
 2. Install dependencies:
