@@ -14,15 +14,20 @@ const getAllUsers = asyncHandler (async (req, res) => {
     }
 })
 
-const getUserById = async (req, res) => {
+const getUserById = asyncHandler(async (req, res) => {
     try {
-        res.status(200).json({ message: "Get user by id" });
-    } catch (error) {
-        res.status(500).json({ message: "Server Error" });
-    }
-};
+        const fetchedUser = await User.findById(req.params['id'])
 
-const createNewUser = async (req, res) => {
+        if (fetchedUser == null) {
+            throw new ApiError(404,"user not found")
+        }
+        return res.status(200).json(new ApiResponse(200,fetchedUser,"fetched user succesfully"))
+    } catch (error) {
+        return res.status(error.statusCode).json({statuscode: error.statusCode, error: error?.message})
+    }
+});
+
+const createNewUser = asyncHandler(async (req, res) => {
     try {
 
         //get data from user
@@ -62,9 +67,9 @@ const createNewUser = async (req, res) => {
     } catch (error) {
         res.status(500).json({error : error.message})
     }
-}
+})
 
-const updateUser = async (req, res) => {
+const updateUser = asyncHandler(async (req, res) => {
     try {
         console.log("got update req");
         const updatedData = req.body;
@@ -93,7 +98,13 @@ const updateUser = async (req, res) => {
         console.error("update failed", error);
         res.status(403).json({ message: error?.message });
     }
-};
+});
+
+const deleteUser = asyncHandler(async (req, res) =>{
+    await User.findByIdAndDelete(req.params['id'])
+    return res.status(200).json("deleted successfully")
+
+})
 
 
-export { getAllUsers, getUserById, createNewUser, updateUser};
+export { getAllUsers, getUserById, createNewUser, updateUser, deleteUser};
