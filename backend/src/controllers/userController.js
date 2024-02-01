@@ -64,16 +64,36 @@ const createNewUser = async (req, res) => {
     }
 }
 
-const updateUser = async (req,res) => {
-    console.log("got update req");
-    const updatedData = req.body;
+const updateUser = async (req, res) => {
+    try {
+        console.log("got update req");
+        const updatedData = req.body;
 
-    console.log("updating ...");
-    const updatingUser = await User.findOneAndUpdate(updatedData.email,updatedData);
+        console.log("updating ...");
+        // Use findOneAndUpdate to directly update the document in the database
+        const updatingUser = await User.findOneAndUpdate(
+            { email: updatedData.email },
+            { $set: { password: updatedData.password,
+            email: updatedData.email,
+            firstName: updatedData.firstName,
+            lastName: updatedData.lastName,
+            phoneNumber: updatedData.phoneNumber,
+            address: updatedData.address,
+            postalCode: updatedData.postalCode,
+            dateOfBirth: updatedData.dateOfBirth,
+            collegeName: updatedData.collegeName,
+            studentId: updatedData.studentId,
+            isAdmin: updatedData.isAdmin } },
+            { new: true } // Return the updated document
+        );
 
-    console.log("saving update");
-    await updatingUser.save();
-    res.status(200).json({ message: "User Updated "})
+        console.log("update successful");
+        res.status(200).json({ updatedData: updatingUser });
+    } catch (error) {
+        console.error("update failed", error);
+        res.status(403).json({ message: error?.message });
+    }
 };
+
 
 export { getAllUsers, getUserById, createNewUser, updateUser};
