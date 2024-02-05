@@ -39,7 +39,7 @@ const createNewUser = asyncHandler(async (req, res) => {
         //return the response
 
         const { firstName, lastName, email, password, phoneNumber, address, postalCode, dateOfBirth, collegeName, studentId, isAdmin} = req.body
-        if([firstName, lastName, email, password].some((field) => field?.trim() === "")){
+        if([firstName, lastName, email, password, phoneNumber, address, postalCode, dateOfBirth, collegeName, studentId, isAdmin].some((field) => field?.trim() === "")){
             throw new ApiError(400, "All Fields are required")
         }
         const existingUser = await User.findOne({email})
@@ -106,5 +106,30 @@ const deleteUser = asyncHandler(async (req, res) =>{
 
 })
 
+const changeUserPassword = asyncHandler(async(req, res) => {
+try {
+    
+        const {currentPassword, newPassword} = req.body
+    
+        const user = await User.findById(req.user._id)
+    
+         const isPasswordCorrect = await user.isPasswordCorrect(currentPassword)
+    
+         if (!isPasswordCorrect) {
+                throw new ApiError(400,"Invalid Password")
+         }
+    
+        user.password = newPassword
+    
+        await user.save({validateBeforeSave: false})
+    
+        return res.status(200).json(
+            new ApiResponse(200,{},"Password Changed Successfully")
+        )
+} catch (error) {
+    throw new ApiError(error.statusCode,error?.message || "Inavlid password request")
+}
+})
 
-export { getAllUsers, getUserById, createNewUser, updateUser, deleteUser};
+
+export { getAllUsers, getUserById, createNewUser, updateUser, deleteUser, changeUserPassword};
