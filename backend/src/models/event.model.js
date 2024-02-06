@@ -1,6 +1,9 @@
 import mongoose from "mongoose"
 
-const eventSchema = mongoose.Schema({
+const { Schema } = mongoose; // Corrected line
+
+
+const eventSchema = new Schema({
     eventName : {
         type : String,
         required : true,
@@ -24,8 +27,8 @@ const eventSchema = mongoose.Schema({
     },
     eventStatus :{
         type : String,
-        enum : ["UPCOMING", "ONGOING", "CANCELLED", "CLOSED"],
-        default : "UPCOMING"
+        enum : ["UpComing", "OnGoing", "Cancelled", "Closed"],
+        default : "UpComing"
     },
     fee : {
         type : Number,
@@ -38,3 +41,5 @@ const eventSchema = mongoose.Schema({
 },{timestamps : true});
 
 const Event = mongoose.model("Event", eventSchema);
+
+export { Event };
