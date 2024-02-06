@@ -48,7 +48,11 @@ const createEvents = asyncHandler(async(req, res) => {
         if(existingEvent){
             throw new ApiError(409, "Event already exist...")
         }
-        const eventBannerLocalPath = req.files?.eventBanner[0]?.path
+        let eventBannerLocalPath = false
+        
+        if (req.files && req.files.eventBanner && req.files.eventBanner[0]) {
+            eventBannerLocalPath = req.files.eventBanner[0].path || false;
+        }
     
         if (!eventBannerLocalPath) {
             throw new ApiError(400, "Event Banner required")
@@ -85,4 +89,46 @@ const createEvents = asyncHandler(async(req, res) => {
 
 })
 
-export {getAllEvents, createEvents}
+const getActiveEvents = asyncHandler(async( req, res ) => {
+    const activeEvents = await Event.find({eventStatus : "OnGoing"})
+    return res.status(200).json(
+        new ApiResponse(200,activeEvents,"Active Events Fetched")
+    )
+})
+
+const updateEvents = asyncHandler(async(req, res) => {
+    const updatedEvent = req.body
+    let eventBannerLocalPath = false
+
+    if (req.files && req.files.eventBanner && req.files.eventBanner[0]) {
+        eventBannerLocalPath = req.files.eventBanner[0].path || false;
+    }
+
+    if (eventBannerLocalPath) {
+        const banner = await uploadOnCloudinary(eventBannerLocalPath)
+        if (!banner.url) {
+            throw new ApiError(400, "Error while uploading on cloudinary")
+        }
+        updatedEvent.eventBanner = banner.url
+        
+    }
+        const results = await Event.findByIdAndUpdate(updatedEvent._id ,{
+            $set : updatedEvent
+        },
+        {new : true})
+
+        return res.status(200).json(
+            new ApiResponse(200,{results},"Event Updated Successfully")
+        )
+})
+
+const deleteEvents = asyncHandler(async(req, res) => {
+    const user = req.body._id
+
+    const results = await Event.findByIdAndDelete(user)
+
+    return res.status(200).json(
+        new ApiResponse(200,results,"Event Deleted Successfully")
+    )
+})
+export {getAllEvents, createEvents, getActiveEvents, updateEvents, deleteEvents}

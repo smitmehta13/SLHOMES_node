@@ -1,4 +1,4 @@
-import { getAllEvents, createEvents } from "../controllers/eventController.js"; 
+import { getAllEvents, createEvents, getActiveEvents, updateEvents, deleteEvents } from "../controllers/eventController.js"; 
 import express from "express"
 import {upload} from "../middlewares/multer.middleware.js"
 
@@ -14,5 +14,16 @@ router.route("/create").post(
     ]),
     createEvents
     )
+router.route("/active").get(getActiveEvents)
+router.route("/update").patch(
+    upload.fields([
+        {
+            name: "eventBanner",
+            maxCount: 1
+        }
+    ]),
+    updateEvents
+)
+router.route("/delete").delete(deleteEvents)
 
 export default router
