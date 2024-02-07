@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import { createProperties, getAllProperties } from "../controllers/propertyController.js";
+import { createProperties, deleteProperty, getAllProperties, updateProperty } from "../controllers/propertyController.js";
 import {upload } from "../middlewares/multer.middleware.js"
 
 // router.route("/").get(getAllProperties);
@@ -11,6 +11,8 @@ router.post("/create", upload.fields([
     maxCount:1
     }
 ]),createProperties)
+router.patch("/update", updateProperty)
+router.delete("/delete", deleteProperty)
 
 
 export default router

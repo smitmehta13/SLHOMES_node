@@ -32,9 +32,9 @@ const createProperties = asyncHandler(async(req, res) => {
 
   const propertyImage = await uploadOnCloudinary(propertyImagePath)
 
-  const existingProperty = await Property.find({title : title})
+  const existingProperty = await Property.find({title: title})
 
-  if (existingProperty) {
+  if (existingProperty.length > 0) {
     throw new ApiError(401, "Property Already Exist")
   }
 
@@ -43,4 +43,25 @@ const createProperties = asyncHandler(async(req, res) => {
   res.status(200).json({property})
 
 })
-export { getAllProperties, createProperties };
+
+const updateProperty = asyncHandler(async(req, res) => {
+
+  const updatedProperty = req.body
+
+  const results = await Property.findByIdAndUpdate(updatedProperty._id,updatedProperty,{new:true})
+
+  res.status(200).json(results)
+})
+
+const deleteProperty = asyncHandler(async(req, res) => {
+  const deletedProperty = req.body
+
+  if (!deletedProperty._id) {
+    throw new ApiError(401, "ID Fields is Required")
+  }
+
+  const results = await Property.findByIdAndDelete(deletedProperty._id,{new:true})
+
+  res.status(200).json(results)
+})
+export { getAllProperties, createProperties, updateProperty, deleteProperty };
