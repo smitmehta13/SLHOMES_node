@@ -16,7 +16,13 @@ const propertySchema = new Schema({
     propertyType: {
         type: String,
         required : true
-    }
+    },
+    units: [
+                {
+                  type: mongoose.Schema.Types.ObjectId,
+                  ref:'Unit'
+                }
+            ]
     
 },
 {timestamps : true})

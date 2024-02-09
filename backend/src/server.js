@@ -7,6 +7,7 @@ import userRouter from "./routes/user.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import eventRouter from "./routes/event.routes.js"
 import propertyRouter from "./routes/property.routes.js";
+import unitRouter from "./routes/unit.routes.js"
 
 const app = express()
 
@@ -34,6 +35,7 @@ app.use("/api/users", userRouter,authRouter)
 app.use("/api/property", propertyRouter)
 app.use('/api', endpointsRouter);
 app.use("/api/events", eventRouter)
+app.use("/api/units", unitRouter)
 
 
 
