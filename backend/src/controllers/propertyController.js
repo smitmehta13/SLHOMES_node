@@ -6,7 +6,16 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js"
 
 const getAllProperties = asyncHandler(async (req, res) => {
   try {
-    const properties = await Property.find({});
+    const properties = await Property.aggregate([
+       {
+        $lookup:{
+          from: "units",
+          localField: "_id",
+          foreignField: "property",
+          as: "units"
+        }
+       }
+    ])
     return res.status(200).json(
       new ApiResponse(200, properties, "Fetched all properties")
     )

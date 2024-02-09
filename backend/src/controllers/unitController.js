@@ -10,7 +10,16 @@ const createUnit = asyncHandler(async(req, res) => {
     unitDescription,
     rent} = req.body
 
+    if ([unitNumber, property, unitDescription, rent].some((field)=> (field).trim()=== "")) {
+        throw new ApiError(403, "All fields are required")
+    }
+
     const propertyData = await Property.findOne({title : property})
+
+    if (!propertyData) {
+        throw new ApiError(404, "Property doesn't exist")
+    }
+
     const unitData = await Unit.create({
         unitNumber: unitNumber,
         property: propertyData._id,
@@ -22,7 +31,23 @@ const createUnit = asyncHandler(async(req, res) => {
 })
 
 const getAllUnits = asyncHandler(async(req, res)=>{
-    const unitData = await Unit.find({})
+    const unitData = await Unit.aggregate([
+        {
+            $lookup:{
+                from: "properties",
+                localField: "property",
+                foreignField: "_id",
+                as: "property"
+            }
+        },
+        {
+            $addFields:{
+                property:{
+                    $first: "$property"
+                }
+            }
+        }
+    ])
 
     return res.status(200).json(
         new ApiResponse(200,unitData,"units fetched successfully")
