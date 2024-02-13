@@ -28,7 +28,7 @@ const uploadOnCloudinary = async (localFilePath) => {
         // Check if the upload was successful
         if (response && response.public_id) {
             fs.unlinkSync(localFilePath);
-            return response;
+            return response.url;
         } else {
             console.error("Cloudinary upload failed:", response);
             fs.unlinkSync(localFilePath);

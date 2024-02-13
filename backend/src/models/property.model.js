@@ -1,6 +1,7 @@
 import mongoose from "mongoose"
+const { Schema } = mongoose
 
-const propertySchema = mongoose.Schema({
+const propertySchema = new Schema({
     title: {
         type: String,
         required: true
@@ -15,7 +16,13 @@ const propertySchema = mongoose.Schema({
     propertyType: {
         type: String,
         required : true
-    }
+    },
+    units: [
+                {
+                  type: mongoose.Schema.Types.ObjectId,
+                  ref:'Unit'
+                }
+            ]
     
 },
 {timestamps : true})
