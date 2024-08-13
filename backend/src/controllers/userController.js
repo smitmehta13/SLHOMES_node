@@ -29,46 +29,41 @@ const getUserById = asyncHandler(async (req, res) => {
 
 const createNewUser = asyncHandler(async (req, res) => {
     try {
-
-        //get data from user
-        //validation - not empty
-        //check if user already exist
-        //create user object and enter into DB
-        //remove password and refresh token field from response
-        //check for user creation
-        //return the response
-
-        const { firstName, lastName, email, password, phoneNumber, address, postalCode, dateOfBirth, collegeName, studentId, isAdmin} = req.body
-        if([firstName, lastName, email, password, phoneNumber, address, postalCode, dateOfBirth, collegeName, studentId, isAdmin].some((field) => field?.trim() === "")){
-            throw new ApiError(400, "All Fields are required")
+        // Get data from user
+        const { firstName, lastName, email, password, phoneNumber, address, postalCode, dateOfBirth, collegeName, studentId, isAdmin } = req.body;
+    
+        // Validation - not empty
+        const fields = [firstName, lastName, email, password, phoneNumber, address, postalCode, dateOfBirth, collegeName, studentId, isAdmin];
+        if (fields.some(field => typeof field === 'string' && field.trim() === "")) {
+            throw new ApiError(400, "All Fields are required");
         }
-        const existingUser = await User.findOne({email})
-        if(existingUser){
-            throw new ApiError(409, "User already exist with same email...")
+    
+        // Check if user already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            throw new ApiError(409, "User already exists with the same email...");
         }
+    
+        // Create user object and enter into DB
         const user = await User.create({
-            firstName, lastName, 
-            email, password,
-             phoneNumber, address, 
-             postalCode, dateOfBirth, 
-             collegeName, studentId, 
-             isAdmin  
-        })
-
-        const createdUser = await User.findById(user._id).select("-password")
-
-        if(!createdUser){
-            throw new ApiError(500, "something went wrong while creating user")
+            firstName, lastName, email, password, phoneNumber, address, postalCode, dateOfBirth, collegeName, studentId, isAdmin
+        });
+    
+        // Remove password and refresh token field from response
+        const createdUser = await User.findById(user._id).select("-password");
+    
+        // Check for user creation
+        if (!createdUser) {
+            throw new ApiError(500, "Something went wrong while creating user");
         }
-         return res.status(201).json(
-            new ApiResponse(200, createdUser, "User Registered successfully")
-         )
-   
+    
+        // Return the response
+        return res.status(201).json(createdUser);
     } catch (error) {
-        res.status(500).json({error : error.message})
+        console.error("create user failed", error);
+        res.status(500).json({ message: error?.message });
     }
-})
-
+});
 const updateUser = asyncHandler(async (req, res) => {
     try {
         console.log("got update req");
